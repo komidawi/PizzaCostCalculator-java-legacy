@@ -18,13 +18,24 @@ public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
+    private AfterTextChangedListener afterTextChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeAfterTextChangedListener();
         initializeViews();
+    }
+
+    private void initializeAfterTextChangedListener() {
+        afterTextChangedListener = new AfterTextChangedListener() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                handlePropertiesChanged();
+            }
+        };
     }
 
     private void initializeViews() {
@@ -35,22 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeDiagonalInput() {
         diagonalInput = findViewById(R.id.diagonal_input);
-        diagonalInput.addTextChangedListener(new AfterTextChangedListener() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                handlePropertiesChanged();
-            }
-        });
+        diagonalInput.addTextChangedListener(afterTextChangedListener);
     }
 
     private void initializePriceInput() {
         priceInput = findViewById(R.id.price_input);
-        priceInput.addTextChangedListener(new AfterTextChangedListener() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                handlePropertiesChanged();
-            }
-        });
+        priceInput.addTextChangedListener(afterTextChangedListener);
     }
 
     private void handlePropertiesChanged() {
