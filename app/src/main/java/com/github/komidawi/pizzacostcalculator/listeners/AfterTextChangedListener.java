@@ -3,7 +3,7 @@ package com.github.komidawi.pizzacostcalculator.listeners;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-public class AfterTextChangedListener implements TextWatcher {
+public abstract class AfterTextChangedListener implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -15,7 +15,5 @@ public class AfterTextChangedListener implements TextWatcher {
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
-
-    }
+    public abstract void afterTextChanged(Editable editable);
 }

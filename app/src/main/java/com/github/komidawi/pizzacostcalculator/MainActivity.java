@@ -1,13 +1,18 @@
 package com.github.komidawi.pizzacostcalculator;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.Editable;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.komidawi.pizzacostcalculator.RecyclerView.PizzaAdapter;
 import com.github.komidawi.pizzacostcalculator.listeners.AfterTextChangedListener;
+import com.github.komidawi.pizzacostcalculator.pizza.PizzaModel;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
 
 import java.util.Locale;
@@ -18,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
+
+    private PizzaAdapter pizzaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         initializeDiagonalInput();
         initializePriceInput();
         ratioDisplay = findViewById(R.id.ratio_display);
+        initializeAddPizzaButton();
+        initializeRecyclerView();
     }
 
     private void initializeDiagonalInput() {
@@ -51,6 +60,34 @@ public class MainActivity extends AppCompatActivity {
                 handlePropertiesChanged();
             }
         });
+    }
+
+    private void initializeAddPizzaButton() {
+        Button addPizzaButton = findViewById(R.id.add_pizza_button);
+        addPizzaButton.setOnClickListener(view -> {
+            int diagonal = Integer.parseInt(diagonalInput.getText().toString());
+            double price = Double.parseDouble(priceInput.getText().toString());
+            double ratio = Double.parseDouble(ratioDisplay.getText().toString());
+
+            PizzaModel pizzaModel = new PizzaModel();
+            pizzaModel.setDiagonal(diagonal);
+            pizzaModel.setPrice(price);
+            pizzaModel.setRatio(ratio);
+
+            pizzaAdapter.addPizza(pizzaModel);
+        });
+    }
+
+    private void initializeRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.added_pizza_models_view);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        pizzaAdapter = new PizzaAdapter();
+        recyclerView.setAdapter(pizzaAdapter);
     }
 
     private void handlePropertiesChanged() {
