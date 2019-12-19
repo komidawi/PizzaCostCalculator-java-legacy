@@ -5,9 +5,16 @@ import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
 public class Calculator {
     private static final int SQ_CENTIMETERS_IN_SQ_METRE = 10000;
 
-    // Calculates price / area ratio in currency units per one square meter of pizza
-    public static double calculateRatio(int diagonal, double price, PizzaShape pizzaShape) {
-        double area = calculateArea(diagonal, pizzaShape);
+    /**
+     * Calculates price/area ratio in currency units per one square meter of a pizza
+     *
+     * @param diagonalInCentimeters pizza diagonal in centimeters
+     * @param price                 pizza price value
+     * @param pizzaShape            pizza shape
+     * @return price/area ratio in currency units per one square meter of a pizza
+     */
+    public static double calculateRatio(int diagonalInCentimeters, double price, PizzaShape pizzaShape) {
+        double area = calculateArea(diagonalInCentimeters, pizzaShape);
         return (price / area) * SQ_CENTIMETERS_IN_SQ_METRE;
     }
 

@@ -25,26 +25,19 @@ public class MainActivity extends AppCompatActivity {
     private EditText priceInput;
     private TextView ratioDisplay;
     private PizzaAdapter pizzaAdapter;
+    private TextWatcher afterTextChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeAfterTextChangedListener();
         initializeViews();
     }
 
-    private void initializeViews() {
-        AfterTextChangedListener listener = initializeAfterTextChangedListener();
-        initializeDiagonalInput(listener);
-        initializePriceInput(listener);
-        ratioDisplay = findViewById(R.id.ratio_display);
-        initializeAddPizzaButton();
-        initializeRecyclerView();
-    }
-
-    private AfterTextChangedListener initializeAfterTextChangedListener() {
-        return new AfterTextChangedListener() {
+    private void initializeAfterTextChangedListener() {
+        afterTextChangedListener = new AfterTextChangedListener() {
             @Override
             public void afterTextChanged(Editable editable) {
                 handlePropertiesChanged();
@@ -52,14 +45,22 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void initializeDiagonalInput(TextWatcher textWatcher) {
-        diagonalInput = findViewById(R.id.diagonal_input);
-        diagonalInput.addTextChangedListener(textWatcher);
+    private void initializeViews() {
+        initializeDiagonalInput();
+        initializePriceInput();
+        ratioDisplay = findViewById(R.id.ratio_display);
+        initializeAddPizzaButton();
+        initializeRecyclerView();
     }
 
-    private void initializePriceInput(TextWatcher textWatcher) {
+    private void initializeDiagonalInput() {
+        diagonalInput = findViewById(R.id.diagonal_input);
+        diagonalInput.addTextChangedListener(afterTextChangedListener);
+    }
+
+    private void initializePriceInput() {
         priceInput = findViewById(R.id.price_input);
-        priceInput.addTextChangedListener(textWatcher);
+        priceInput.addTextChangedListener(afterTextChangedListener);
     }
 
     private void initializeAddPizzaButton() {
