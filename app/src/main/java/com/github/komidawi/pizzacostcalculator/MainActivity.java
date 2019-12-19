@@ -2,6 +2,7 @@ package com.github.komidawi.pizzacostcalculator;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
-
     private PizzaAdapter pizzaAdapter;
 
     @Override
@@ -35,31 +35,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        initializeDiagonalInput();
-        initializePriceInput();
+        AfterTextChangedListener listener = initializeAfterTextChangedListener();
+        initializeDiagonalInput(listener);
+        initializePriceInput(listener);
         ratioDisplay = findViewById(R.id.ratio_display);
         initializeAddPizzaButton();
         initializeRecyclerView();
     }
 
-    private void initializeDiagonalInput() {
-        diagonalInput = findViewById(R.id.diagonal_input);
-        diagonalInput.addTextChangedListener(new AfterTextChangedListener() {
+    private AfterTextChangedListener initializeAfterTextChangedListener() {
+        return new AfterTextChangedListener() {
             @Override
             public void afterTextChanged(Editable editable) {
                 handlePropertiesChanged();
             }
-        });
+        };
     }
 
-    private void initializePriceInput() {
+    private void initializeDiagonalInput(TextWatcher textWatcher) {
+        diagonalInput = findViewById(R.id.diagonal_input);
+        diagonalInput.addTextChangedListener(textWatcher);
+    }
+
+    private void initializePriceInput(TextWatcher textWatcher) {
         priceInput = findViewById(R.id.price_input);
-        priceInput.addTextChangedListener(new AfterTextChangedListener() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                handlePropertiesChanged();
-            }
-        });
+        priceInput.addTextChangedListener(textWatcher);
     }
 
     private void initializeAddPizzaButton() {
@@ -69,11 +69,7 @@ public class MainActivity extends AppCompatActivity {
             double price = Double.parseDouble(priceInput.getText().toString());
             double ratio = Double.parseDouble(ratioDisplay.getText().toString());
 
-            PizzaModel pizzaModel = new PizzaModel();
-            pizzaModel.setDiagonal(diagonal);
-            pizzaModel.setPrice(price);
-            pizzaModel.setRatio(ratio);
-
+            PizzaModel pizzaModel = new PizzaModel(diagonal, price, ratio);
             pizzaAdapter.addPizza(pizzaModel);
         });
     }
