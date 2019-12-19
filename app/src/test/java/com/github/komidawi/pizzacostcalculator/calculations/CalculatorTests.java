@@ -11,11 +11,11 @@ public class CalculatorTests {
 
     @Test
     public void test_42dia_20price_circle_ratioCalculation() {
-        assertEquals(0.014435822502666245, calculateRatio(42, 20, CIRCLE), 0.01);
+        assertEquals(144.35822502666245, calculateRatio(42, 20, CIRCLE), 0.01);
     }
 
     @Test
     public void test_42dia_20val_square_ratioCalculation() {
-        assertEquals(0.022675736961451247, calculateRatio(42, 20, SQUARE), 0.01);
+        assertEquals(226.75736961451247, calculateRatio(42, 20, SQUARE), 0.01);
     }
 }
