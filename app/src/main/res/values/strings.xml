@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Pizza Cost Calculator</string>
+    <string name="diagonal_input_label">Enter pizza diagonal (size)</string>
+    <string name="diagonal_input_hint">Diagonal (Size)</string>
+    <string name="diagonal_input_unit">cm</string>
+    <string name="price_input_label">Enter pizza price</string>
+    <string name="price_input_hint">Price</string>
+    <string name="price_input_unit">zł</string>
+    <string name="ratio_display_label">Price / area ratio:</string>
+    <string name="ratio_unit">zł/m²</string>
 </resources>
