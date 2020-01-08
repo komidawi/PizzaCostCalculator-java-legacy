@@ -9,4 +9,5 @@
     <string name="ratio_display_label">Price / area ratio:</string>
     <string name="ratio_unit">zł/m²</string>
     <string name="add_pizza_button_text">Add pizza</string>
+    <string name="fill_required_fields_message">Please fill all required fields</string>
 </resources>

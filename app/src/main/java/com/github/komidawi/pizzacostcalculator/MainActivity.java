@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
 
 import java.util.Locale;
 
+import static androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import static com.github.komidawi.pizzacostcalculator.calculations.Calculator.calculateRatio;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,20 +68,29 @@ public class MainActivity extends AppCompatActivity {
     private void initializeAddPizzaButton() {
         Button addPizzaButton = findViewById(R.id.add_pizza_button);
         addPizzaButton.setOnClickListener(view -> {
+            handlePizzaButtonClick();
+        });
+    }
+
+    private void handlePizzaButtonClick() {
+        try {
             int diagonal = Integer.parseInt(diagonalInput.getText().toString());
             double price = Double.parseDouble(priceInput.getText().toString());
             double ratio = Double.parseDouble(ratioDisplay.getText().toString());
 
             PizzaModel pizzaModel = new PizzaModel(diagonal, price, ratio);
             pizzaAdapter.addPizza(pizzaModel);
-        });
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), R.string.fill_required_fields_message, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     private void initializeRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.added_pizza_models_view);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager
+        LayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
