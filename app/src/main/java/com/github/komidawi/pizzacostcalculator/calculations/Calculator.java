@@ -32,7 +32,7 @@ public class Calculator {
     }
 
     private static double calculateCircleArea(int diagonal) {
-        return Math.PI * Math.pow(diagonal / 2, 2);
+        return Math.PI * Math.pow(diagonal / 2.0, 2);
     }
 
     private static double calculateSquareArea(int diagonal) {
