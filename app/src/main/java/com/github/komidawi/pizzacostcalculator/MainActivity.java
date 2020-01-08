@@ -1,24 +1,33 @@
 package com.github.komidawi.pizzacostcalculator;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.komidawi.pizzacostcalculator.RecyclerView.PizzaAdapter;
 import com.github.komidawi.pizzacostcalculator.listeners.AfterTextChangedListener;
+import com.github.komidawi.pizzacostcalculator.pizza.PizzaModel;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
 
 import java.util.Locale;
 
+import static androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import static com.github.komidawi.pizzacostcalculator.calculations.Calculator.calculateRatio;
 
 public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
-    private AfterTextChangedListener afterTextChangedListener;
+    private PizzaAdapter pizzaAdapter;
+    private TextWatcher afterTextChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         initializeDiagonalInput();
         initializePriceInput();
         ratioDisplay = findViewById(R.id.ratio_display);
+        initializeAddPizzaButton();
+        initializeRecyclerView();
     }
 
     private void initializeDiagonalInput() {
@@ -52,6 +63,39 @@ public class MainActivity extends AppCompatActivity {
     private void initializePriceInput() {
         priceInput = findViewById(R.id.price_input);
         priceInput.addTextChangedListener(afterTextChangedListener);
+    }
+
+    private void initializeAddPizzaButton() {
+        Button addPizzaButton = findViewById(R.id.add_pizza_button);
+        addPizzaButton.setOnClickListener(view -> {
+            handlePizzaButtonClick();
+        });
+    }
+
+    private void handlePizzaButtonClick() {
+        try {
+            int diagonal = Integer.parseInt(diagonalInput.getText().toString());
+            double price = Double.parseDouble(priceInput.getText().toString());
+            double ratio = Double.parseDouble(ratioDisplay.getText().toString());
+
+            PizzaModel pizzaModel = new PizzaModel(diagonal, price, ratio);
+            pizzaAdapter.addPizza(pizzaModel);
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), R.string.fill_required_fields_message, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.added_pizza_models_view);
+        recyclerView.setHasFixedSize(true);
+
+        LayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        pizzaAdapter = new PizzaAdapter();
+        recyclerView.setAdapter(pizzaAdapter);
     }
 
     private void handlePropertiesChanged() {
