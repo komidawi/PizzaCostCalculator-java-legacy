@@ -12,21 +12,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/diagonal_input_unit"
-        app:layout_constraintBottom_toBottomOf="@+id/diagonal_input"
-        app:layout_constraintStart_toEndOf="@+id/diagonal_input"
-        app:layout_constraintTop_toTopOf="@+id/diagonal_input" />
+        app:layout_constraintBottom_toBottomOf="@+id/pizza_diagonal_input"
+        app:layout_constraintStart_toEndOf="@+id/pizza_diagonal_input"
+        app:layout_constraintTop_toTopOf="@+id/pizza_diagonal_input" />
 
     <TextView
-        android:id="@+id/diagonal_input_label"
+        android:id="@+id/pizza_diagonal_input_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/diagonal_input_label"
-        app:layout_constraintStart_toStartOf="@+id/diagonal_input"
+        app:layout_constraintStart_toStartOf="@+id/pizza_diagonal_input"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/diagonal_input"
+        android:id="@+id/pizza_diagonal_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/main_activity_default_margin"
@@ -37,19 +37,28 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagonal_input_label" />
+        app:layout_constraintTop_toBottomOf="@+id/pizza_diagonal_input_label" />
 
     <TextView
-        android:id="@+id/price_input_label"
+        android:id="@+id/pizza_price_input_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/price_input_label"
-        app:layout_constraintStart_toStartOf="@+id/price_input"
-        app:layout_constraintTop_toBottomOf="@+id/diagonal_input" />
+        app:layout_constraintStart_toStartOf="@+id/pizza_price_input"
+        app:layout_constraintTop_toBottomOf="@+id/pizza_diagonal_input" />
+
+    <TextView
+        android:id="@+id/pizza_name_input_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/pizza_name_input_label"
+        app:layout_constraintStart_toStartOf="@+id/pizza_name_input"
+        app:layout_constraintTop_toBottomOf="@+id/ratio_display_container" />
 
     <EditText
-        android:id="@+id/price_input"
+        android:id="@+id/pizza_price_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/main_activity_default_margin"
@@ -60,28 +69,27 @@
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price_input_label" />
+        app:layout_constraintTop_toBottomOf="@+id/pizza_price_input_label" />
 
     <TextView
         android:id="@+id/price_input_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/price_input_unit"
-        app:layout_constraintBottom_toBottomOf="@+id/price_input"
-        app:layout_constraintStart_toEndOf="@+id/price_input"
-        app:layout_constraintTop_toTopOf="@+id/price_input" />
+        app:layout_constraintBottom_toBottomOf="@+id/pizza_price_input"
+        app:layout_constraintStart_toEndOf="@+id/pizza_price_input"
+        app:layout_constraintTop_toTopOf="@+id/pizza_price_input" />
 
     <TextView
         android:id="@+id/ratio_display_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/main_activity_default_margin"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="@dimen/main_activity_default_margin"
         android:text="@string/ratio_display_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price_input" />
+        app:layout_constraintTop_toBottomOf="@+id/pizza_price_input" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ratio_display_container"
@@ -114,6 +122,7 @@
             app:layout_constraintEnd_toStartOf="@+id/ratio_display_unit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -122,17 +131,33 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/add_pizza_button_text"
+        app:layout_constraintBottom_toBottomOf="@+id/pizza_name_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratio_display_label" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/pizza_name_input"
+        app:layout_constraintTop_toTopOf="@+id/pizza_name_input" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/added_pizza_models_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/main_activity_default_margin"
+        android:layout_marginLeft="@dimen/main_activity_default_margin"
+        android:layout_marginRight="@dimen/main_activity_default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratio_display_container" />
+        app:layout_constraintTop_toBottomOf="@+id/pizza_name_input" />
+
+    <EditText
+        android:id="@+id/pizza_name_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/pizza_name_input"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/add_pizza_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pizza_name_input_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

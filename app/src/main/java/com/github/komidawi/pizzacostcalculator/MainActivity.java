@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.komidawi.pizzacostcalculator.RecyclerView.PizzaAdapter;
+import com.github.komidawi.pizzacostcalculator.recyclerview.PizzaAdapter;
 import com.github.komidawi.pizzacostcalculator.listeners.AfterTextChangedListener;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaModel;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
+    private EditText nameInput;
     private PizzaAdapter pizzaAdapter;
     private TextWatcher afterTextChangedListener;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        nameInput = findViewById(R.id.pizza_name_input);
         initializeDiagonalInput();
         initializePriceInput();
         ratioDisplay = findViewById(R.id.ratio_display);
@@ -56,34 +58,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeDiagonalInput() {
-        diagonalInput = findViewById(R.id.diagonal_input);
+        diagonalInput = findViewById(R.id.pizza_diagonal_input);
         diagonalInput.addTextChangedListener(afterTextChangedListener);
     }
 
     private void initializePriceInput() {
-        priceInput = findViewById(R.id.price_input);
+        priceInput = findViewById(R.id.pizza_price_input);
         priceInput.addTextChangedListener(afterTextChangedListener);
     }
 
     private void initializeAddPizzaButton() {
         Button addPizzaButton = findViewById(R.id.add_pizza_button);
-        addPizzaButton.setOnClickListener(view -> {
-            handlePizzaButtonClick();
-        });
+        addPizzaButton.setOnClickListener(view -> handleAddPizzaButtonClick());
     }
 
-    private void handlePizzaButtonClick() {
+    private void handleAddPizzaButtonClick() {
         try {
-            int diagonal = Integer.parseInt(diagonalInput.getText().toString());
-            double price = Double.parseDouble(priceInput.getText().toString());
-            double ratio = Double.parseDouble(ratioDisplay.getText().toString());
-
-            PizzaModel pizzaModel = new PizzaModel(diagonal, price, ratio);
+            PizzaModel pizzaModel = createPizzaModel();
             pizzaAdapter.addPizza(pizzaModel);
+            clearInputFields();
+            diagonalInput.requestFocus();
         } catch (NumberFormatException e) {
             Toast.makeText(getApplicationContext(), R.string.fill_required_fields_message, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+    }
+
+    private PizzaModel createPizzaModel() {
+        String name = nameInput.getText().toString();
+        int diagonal = Integer.parseInt(diagonalInput.getText().toString());
+        double price = Double.parseDouble(priceInput.getText().toString());
+        double ratio = Double.parseDouble(ratioDisplay.getText().toString());
+
+        return new PizzaModel(name, diagonal, price, ratio);
+    }
+
+    private void clearInputFields() {
+        nameInput.getText().clear();
+        diagonalInput.getText().clear();
+        priceInput.getText().clear();
     }
 
     private void initializeRecyclerView() {
