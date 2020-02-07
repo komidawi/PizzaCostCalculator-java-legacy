@@ -1,15 +1,32 @@
 <resources>
+    <!-- Main UI -->
     <string name="app_name">Pizza Cost Calculator</string>
+
+
+    <!-- Calculator -->
+    <!-- Diagonal -->
     <string name="diagonal_input_label">Enter pizza diagonal (size)</string>
     <string name="diagonal_input_hint">Diagonal (Size)</string>
     <string name="diagonal_input_unit">cm</string>
+
+    <!-- Price -->
     <string name="price_input_label">Enter pizza price</string>
     <string name="price_input_hint">Price</string>
     <string name="price_input_unit">zł</string>
+
+    <!-- Ratio -->
     <string name="ratio_display_label">Price / area ratio:</string>
     <string name="ratio_unit">zł/m²</string>
     <string name="add_pizza_button_text">Add pizza</string>
     <string name="fill_required_fields_message">Please fill all required fields</string>
+
+    <!-- Name -->
     <string name="pizza_name_input_label">Enter pizza name</string>
     <string name="pizza_name_input">Name</string>
+
+
+    <!-- Errors -->
+    <string name="data_saving_error">An error occurred while saving data</string>
+    <string name="data_reading_error">An error occurred while reading data</string>
+
 </resources>

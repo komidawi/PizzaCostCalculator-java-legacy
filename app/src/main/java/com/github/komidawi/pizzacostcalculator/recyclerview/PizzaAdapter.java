@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapterViewHolder> {
-    private List<PizzaModel> addedPizzas = new ArrayList<>();
+    private final List<PizzaModel> addedPizzas = new ArrayList<>();
 
     @NonNull
     @Override
@@ -36,7 +36,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
 
     @Override
     public int getItemCount() {
-        return addedPizzas == null ? 0 : addedPizzas.size();
+        return addedPizzas.size();
     }
 
     public void addPizza(PizzaModel pizza) {
