@@ -13,14 +13,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.komidawi.pizzacostcalculator.recyclerview.PizzaAdapter;
 import com.github.komidawi.pizzacostcalculator.listeners.AfterTextChangedListener;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaModel;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
+import com.github.komidawi.pizzacostcalculator.recyclerview.PizzaAdapter;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -34,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText nameInput;
     private PizzaAdapter pizzaAdapter;
     private TextWatcher afterTextChangedListener;
-    private FileOutputStream savedPizzasOutputStream;
+    private File pizzaData;
 
+    private static Gson gson = new Gson();
+    private static final String PIZZA_DATA_FILENAME = "savedPizzas.txt";
     private static final String TAG = "MainActivity";
 
     @Override
@@ -43,16 +48,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeFileOutputStream();
+        pizzaData = new File(getApplicationContext().getFilesDir(), PIZZA_DATA_FILENAME);
         initializeAfterTextChangedListener();
         initializeViews();
+        loadPizzaData();
+    }
+
+    private void loadPizzaData() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(pizzaData))) {
+            for (String line; (line = reader.readLine()) != null; ) {
+                PizzaModel pizza = gson.fromJson(line, PizzaModel.class);
+                pizzaAdapter.addPizza(pizza);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     private void handleAddPizzaButtonClick() {
-        try {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(pizzaData, true))) {
             PizzaModel pizzaModel = createPizzaModel();
+
             pizzaAdapter.addPizza(pizzaModel);
-            savedPizzasOutputStream.write((pizzaModel.toString() + "\n").getBytes());
+            writer.append(gson.toJson(pizzaModel)).append("\n");
+
             clearInputFields();
             diagonalInput.requestFocus();
         } catch (NumberFormatException e) {
@@ -63,27 +82,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeFileOutputStream() {
-        try {
-            File savedPizzas = new File(getApplicationContext().getFilesDir(), "savedPizzas.txt");
-            savedPizzasOutputStream = new FileOutputStream(savedPizzas);
-        } catch (FileNotFoundException e) {
-            Toast.makeText(this, R.string.data_reading_error, Toast.LENGTH_SHORT).show();
-            Log.e(TAG, e.toString());
-        }
-    }
-
-    private void handlePropertiesChanged() {
-        String diagonal = diagonalInput.getText().toString();
-        String price = priceInput.getText().toString();
-
-        if (!diagonal.isEmpty() && !price.isEmpty()) {
-            double ratio = calculateRatio(Integer.parseInt(diagonal), Double.parseDouble(price), PizzaShape.CIRCLE);
-            String formattedRatio = String.format(Locale.getDefault(), "%.0f", ratio);
-            ratioDisplay.setText(formattedRatio);
-        }
-    }
-
     private PizzaModel createPizzaModel() {
         String name = nameInput.getText().toString();
         int diagonal = Integer.parseInt(diagonalInput.getText().toString());
@@ -91,15 +89,6 @@ public class MainActivity extends AppCompatActivity {
         double ratio = Double.parseDouble(ratioDisplay.getText().toString());
 
         return new PizzaModel(name, diagonal, price, ratio);
-    }
-
-    private void initializeAfterTextChangedListener() {
-        afterTextChangedListener = new AfterTextChangedListener() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                handlePropertiesChanged();
-            }
-        };
     }
 
     private void initializeViews() {
@@ -136,6 +125,26 @@ public class MainActivity extends AppCompatActivity {
 
         pizzaAdapter = new PizzaAdapter();
         recyclerView.setAdapter(pizzaAdapter);
+    }
+
+    private void initializeAfterTextChangedListener() {
+        afterTextChangedListener = new AfterTextChangedListener() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                handlePropertiesChanged();
+            }
+        };
+    }
+
+    private void handlePropertiesChanged() {
+        String diagonal = diagonalInput.getText().toString();
+        String price = priceInput.getText().toString();
+
+        if (!diagonal.isEmpty() && !price.isEmpty()) {
+            double ratio = calculateRatio(Integer.parseInt(diagonal), Double.parseDouble(price), PizzaShape.CIRCLE);
+            String formattedRatio = String.format(Locale.getDefault(), "%.0f", ratio);
+            ratioDisplay.setText(formattedRatio);
+        }
     }
 
     private void clearInputFields() {
