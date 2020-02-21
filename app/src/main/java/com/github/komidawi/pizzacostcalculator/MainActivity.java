@@ -3,7 +3,6 @@ package com.github.komidawi.pizzacostcalculator;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,14 +16,9 @@ import com.github.komidawi.pizzacostcalculator.listeners.AfterTextChangedListene
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaModel;
 import com.github.komidawi.pizzacostcalculator.pizza.PizzaShape;
 import com.github.komidawi.pizzacostcalculator.recyclerview.PizzaAdapter;
-import com.google.gson.Gson;
+import com.github.komidawi.pizzacostcalculator.serializer.PizzaDataSerializer;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import static androidx.recyclerview.widget.RecyclerView.LayoutManager;
@@ -37,48 +31,40 @@ public class MainActivity extends AppCompatActivity {
     private EditText nameInput;
     private PizzaAdapter pizzaAdapter;
     private TextWatcher afterTextChangedListener;
-    private File pizzaData;
-
-    private static Gson gson = new Gson();
-    private static final String PIZZA_DATA_FILENAME = "savedPizzas.txt";
-    private static final String TAG = "MainActivity";
+    private PizzaDataSerializer serializer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pizzaData = new File(getApplicationContext().getFilesDir(), PIZZA_DATA_FILENAME);
+        serializer = new PizzaDataSerializer(this);
         initializeAfterTextChangedListener();
         initializeViews();
-        loadPizzaData();
+        loadData();
     }
 
-    private void loadPizzaData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(pizzaData))) {
-            for (String line; (line = reader.readLine()) != null; ) {
-                PizzaModel pizza = gson.fromJson(line, PizzaModel.class);
-                pizzaAdapter.addPizza(pizza);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        serializer.serializeData(pizzaAdapter.getPizzas());
+    }
+
+    private void loadData() {
+        List<PizzaModel> pizzas = serializer.deserializeData();
+        pizzaAdapter.setPizzas(pizzas);
     }
 
     private void handleAddPizzaButtonClick() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(pizzaData, true))) {
+        try {
             PizzaModel pizzaModel = createPizzaModel();
 
             pizzaAdapter.addPizza(pizzaModel);
-            writer.append(gson.toJson(pizzaModel)).append("\n");
 
             clearInputFields();
             diagonalInput.requestFocus();
         } catch (NumberFormatException e) {
             Toast.makeText(getApplicationContext(), R.string.fill_required_fields_message, Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, R.string.data_saving_error, Toast.LENGTH_SHORT).show();
-            Log.e(TAG, e.toString());
         }
     }
 

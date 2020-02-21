@@ -24,9 +24,11 @@
     <string name="pizza_name_input_label">Enter pizza name</string>
     <string name="pizza_name_input">Name</string>
 
+    <!-- Saved pizzas -->
+    <string name="remove_pizza">Remove</string>
+
 
     <!-- Errors -->
     <string name="data_saving_error">An error occurred while saving data</string>
     <string name="data_reading_error">An error occurred while reading data</string>
-
 </resources>

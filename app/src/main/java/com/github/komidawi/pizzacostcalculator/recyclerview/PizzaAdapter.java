@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapterViewHolder> {
-    private final List<PizzaModel> addedPizzas = new ArrayList<>();
+    private List<PizzaModel> pizzas = new ArrayList<>();
 
     @NonNull
     @Override
@@ -30,18 +31,37 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
 
     @Override
     public void onBindViewHolder(@NonNull PizzaAdapterViewHolder holder, int position) {
-        PizzaModel pizza = addedPizzas.get(position);
+        PizzaModel pizza = pizzas.get(position);
+        setRemoveButtonOnClickListener(holder);
         holder.bind(pizza);
+    }
+
+    private void setRemoveButtonOnClickListener(@NonNull PizzaAdapterViewHolder holder) {
+        holder.removePizza.setOnClickListener(view -> {
+            int newPosition = holder.getAdapterPosition();
+            pizzas.remove(newPosition);
+            notifyItemRemoved(newPosition);
+            notifyItemRangeChanged(newPosition, pizzas.size());
+        });
+    }
+
+    public void addPizza(PizzaModel pizza) {
+        pizzas.add(pizza);
+        notifyDataSetChanged();
+    }
+
+    public void setPizzas(List<PizzaModel> pizzas) {
+        this.pizzas = pizzas;
+        notifyDataSetChanged();
+    }
+
+    public List<PizzaModel> getPizzas() {
+        return pizzas;
     }
 
     @Override
     public int getItemCount() {
-        return addedPizzas.size();
-    }
-
-    public void addPizza(PizzaModel pizza) {
-        addedPizzas.add(pizza);
-        notifyDataSetChanged();
+        return pizzas.size();
     }
 
     class PizzaAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -49,6 +69,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
         final TextView diagonal;
         final TextView price;
         final TextView ratio;
+        final ImageButton removePizza;
 
         PizzaAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +78,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
             diagonal = itemView.findViewById(R.id.pizza_model_item_diagonal);
             price = itemView.findViewById(R.id.pizza_model_item_price);
             ratio = itemView.findViewById(R.id.pizza_model_item_ratio);
+            removePizza = itemView.findViewById(R.id.pizza_model_remove);
         }
 
         void bind(PizzaModel pizza) {
