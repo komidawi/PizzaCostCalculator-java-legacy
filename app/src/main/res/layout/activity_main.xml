@@ -80,16 +80,63 @@
         app:layout_constraintStart_toEndOf="@+id/pizza_price_input"
         app:layout_constraintTop_toTopOf="@+id/pizza_price_input" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pizza_shape_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pizza_price_input">
+
+        <TextView
+            android:id="@+id/pizza_shape_input_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pizza_shape_input_label"
+            app:layout_constraintBottom_toTopOf="@+id/pizza_shape_buttons_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/pizza_shape_buttons_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/pizza_shape_circle_button"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pizza_shape_input_label">
+
+            <RadioButton
+                android:id="@+id/pizza_shape_circle_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pizza_shape_circle_button_label" />
+
+            <RadioButton
+                android:id="@+id/pizza_shape_square_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pizza_shape_square_button_label" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/ratio_display_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/main_activity_default_margin"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/main_activity_default_margin"
         android:text="@string/ratio_display_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pizza_price_input" />
+        app:layout_constraintTop_toBottomOf="@+id/pizza_shape_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ratio_display_container"

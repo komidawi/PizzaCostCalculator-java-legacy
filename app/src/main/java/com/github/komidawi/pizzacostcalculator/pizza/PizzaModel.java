@@ -8,4 +8,5 @@ public class PizzaModel {
     private final int diagonal;
     private final double price;
     private final double ratio;
+    private final PizzaShape shape;
 }

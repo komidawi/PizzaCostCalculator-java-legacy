@@ -5,6 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText diagonalInput;
     private EditText priceInput;
     private TextView ratioDisplay;
+    private RadioGroup shapeInput;
     private EditText nameInput;
     private PizzaAdapter pizzaAdapter;
     private TextWatcher afterTextChangedListener;
@@ -74,7 +77,11 @@ public class MainActivity extends AppCompatActivity {
         double price = Double.parseDouble(priceInput.getText().toString());
         double ratio = Double.parseDouble(ratioDisplay.getText().toString());
 
-        return new PizzaModel(name, diagonal, price, ratio);
+        int checkedRadioButtonId = shapeInput.getCheckedRadioButtonId();
+        RadioButton checkedButton = findViewById(checkedRadioButtonId);
+        PizzaShape shape = PizzaShape.valueOf(checkedButton.getText().toString().toUpperCase());
+
+        return new PizzaModel(name, diagonal, price, ratio, shape);
     }
 
     private void initializeViews() {
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         initializeDiagonalInput();
         initializePriceInput();
         ratioDisplay = findViewById(R.id.ratio_display);
+        shapeInput = findViewById(R.id.pizza_shape_buttons_group);
         initializeAddPizzaButton();
         initializeRecyclerView();
     }

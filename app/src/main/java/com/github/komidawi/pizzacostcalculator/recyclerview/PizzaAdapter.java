@@ -69,6 +69,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
         final TextView diagonal;
         final TextView price;
         final TextView ratio;
+        final TextView shape;
         final ImageButton removePizza;
 
         PizzaAdapterViewHolder(@NonNull View itemView) {
@@ -79,6 +80,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
             price = itemView.findViewById(R.id.pizza_model_item_price);
             ratio = itemView.findViewById(R.id.pizza_model_item_ratio);
             removePizza = itemView.findViewById(R.id.pizza_model_remove);
+            shape = itemView.findViewById(R.id.pizza_model_item_shape);
         }
 
         void bind(PizzaModel pizza) {
@@ -86,6 +88,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaAdapter
             diagonal.setText(String.valueOf(pizza.getDiagonal()));
             price.setText(String.valueOf(pizza.getPrice()));
             ratio.setText(String.valueOf(pizza.getRatio()));
+            shape.setText(pizza.getShape().toString());
         }
     }
 }

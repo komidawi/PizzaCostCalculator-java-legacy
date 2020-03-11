@@ -14,6 +14,11 @@
     <string name="price_input_hint">Price</string>
     <string name="price_input_unit">zł</string>
 
+    <!-- Shape -->
+    <string name="pizza_shape_input_label">Choose shape</string>
+    <string name="pizza_shape_circle_button_label">Circle</string>
+    <string name="pizza_shape_square_button_label">Square</string>
+
     <!-- Ratio -->
     <string name="ratio_display_label">Price / area ratio:</string>
     <string name="ratio_unit">zł/m²</string>
