@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         serializer = new PizzaDataSerializer(this);
+        pizzaAdapter = new PizzaAdapter();
         initializeAfterTextChangedListener();
         initializeViews();
         loadData();
@@ -76,10 +78,7 @@ public class MainActivity extends AppCompatActivity {
         int diagonal = Integer.parseInt(diagonalInput.getText().toString());
         double price = Double.parseDouble(priceInput.getText().toString());
         double ratio = Double.parseDouble(ratioDisplay.getText().toString());
-
-        int checkedRadioButtonId = shapeInput.getCheckedRadioButtonId();
-        RadioButton checkedButton = findViewById(checkedRadioButtonId);
-        PizzaShape shape = PizzaShape.valueOf(checkedButton.getText().toString().toUpperCase());
+        PizzaShape shape = getCurrentCheckedShape();
 
         return new PizzaModel(name, diagonal, price, ratio, shape);
     }
@@ -89,9 +88,16 @@ public class MainActivity extends AppCompatActivity {
         initializeDiagonalInput();
         initializePriceInput();
         ratioDisplay = findViewById(R.id.ratio_display);
-        shapeInput = findViewById(R.id.pizza_shape_buttons_group);
+        initializeShapeInput();
         initializeAddPizzaButton();
         initializeRecyclerView();
+    }
+
+    private void initializeShapeInput() {
+        shapeInput = findViewById(R.id.pizza_shape_buttons_group);
+        shapeInput.setOnCheckedChangeListener((group, checkedId) -> {
+            handlePropertiesChanged();
+        });
     }
 
     private void initializeDiagonalInput() {
@@ -115,9 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
         LayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
 
-        pizzaAdapter = new PizzaAdapter();
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(pizzaAdapter);
     }
 
@@ -133,12 +138,20 @@ public class MainActivity extends AppCompatActivity {
     private void handlePropertiesChanged() {
         String diagonal = diagonalInput.getText().toString();
         String price = priceInput.getText().toString();
+        PizzaShape shape = getCurrentCheckedShape();
 
         if (!diagonal.isEmpty() && !price.isEmpty()) {
-            double ratio = calculateRatio(Integer.parseInt(diagonal), Double.parseDouble(price), PizzaShape.CIRCLE);
+            double ratio = calculateRatio(Integer.parseInt(diagonal), Double.parseDouble(price), shape);
             String formattedRatio = String.format(Locale.getDefault(), "%.0f", ratio);
             ratioDisplay.setText(formattedRatio);
         }
+    }
+
+    private PizzaShape getCurrentCheckedShape() {
+        int checkedRadioButtonId = shapeInput.getCheckedRadioButtonId();
+        RadioButton checkedButton = findViewById(checkedRadioButtonId);
+        String shapeString = checkedButton.getText().toString().toUpperCase();
+        return PizzaShape.valueOf(shapeString);
     }
 
     private void clearInputFields() {

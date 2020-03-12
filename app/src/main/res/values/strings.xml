@@ -18,6 +18,7 @@
     <string name="pizza_shape_input_label">Choose shape</string>
     <string name="pizza_shape_circle_button_label">Circle</string>
     <string name="pizza_shape_square_button_label">Square</string>
+    <string name="pizza_shape_icon_display_description">Pizza shape icon display</string>
 
     <!-- Ratio -->
     <string name="ratio_display_label">Price / area ratio:</string>
