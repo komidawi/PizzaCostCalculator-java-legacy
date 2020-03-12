@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -144,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
             double ratio = calculateRatio(Integer.parseInt(diagonal), Double.parseDouble(price), shape);
             String formattedRatio = String.format(Locale.getDefault(), "%.0f", ratio);
             ratioDisplay.setText(formattedRatio);
+        } else {
+            ratioDisplay.setText("");
         }
     }
 
